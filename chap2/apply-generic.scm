@@ -44,11 +44,7 @@
 (define (put op type item)
   ((op-type-table 'insert!) (list op type) item))
 (define (get op type)
-  (let ((query
-          (if (> (length type) 1)
-              (list op  type)
-              (list op (car type)))))
-      ((op-type-table 'lookup) query)))
+  ((op-type-table 'lookup) (list op type)))
 
 (define (put-coercion type1 type2 method)
   ((coercion-table 'insert!) (list type1 type2) method))
@@ -108,16 +104,16 @@
                      (list op type-tags )))))))
 
 (define (install-=zero?)
-  (put '=zero? 'rational (lambda (x) (= (car x) 0)))
-  (put '=zero? 'scheme-number (lambda (x) (= x 0)))
-  (put '=zero? 'complex (lambda (x) (and (= (real-part x) 0) (= (imag-part x) 0))))
-  (put '=zero? 'polynomial (lambda (x) (null? (cdr x)))))
+  (put '=zero? '(rational) (lambda (x) (= (car x) 0)))
+  (put '=zero? '(scheme-number) (lambda (x) (= x 0)))
+  (put '=zero? '(complex) (lambda (x) (and (= (real-part x) 0) (= (imag-part x) 0))))
+  (put '=zero? '(polynomial) (lambda (x) (null? (cdr x)))))
 
 (define (install-equ?)
-  (put 'equ? 'scheme-number (lambda (x y) (= x y)))
-  (put 'equ? 'rational (lambda (x y) (and (= (car x) (car y))
+  (put 'equ? '(scheme-number) (lambda (x y) (= x y)))
+  (put 'equ? '(rational) (lambda (x y) (and (= (car x) (car y))
                                           (= (cdr x) (cdr y)))))
-  (put 'equ? 'complex (lambda (x y) (and (= (real-part x) (real-part y))
+  (put 'equ? '(complex) (lambda (x y) (and (= (real-part x) (real-part y))
                                          (= (imag-part x) (imag-part y))))))
 
 (define (real-part z) (apply-generic 'real-part z))
