@@ -44,7 +44,11 @@
 (define (put op type item)
   ((op-type-table 'insert!) (list op type) item))
 (define (get op type)
-  ((op-type-table 'lookup) (list op type)))
+  (let ((query
+          (if (> (length type) 1)
+              (list op (car type))
+              (list op type))))
+    ((op-type-table 'lookup) query)))
 
 (define (put-coercion type1 type2 method)
   ((coercion-table 'insert!) (list type1 type2) method))
@@ -91,16 +95,16 @@
                     (a1 (car args ))
                     (a2 (cadr args )))
                 (if (= type1 type2)
-                    (error "No method for these types" (list op type-tags ))
+                    (error "No method for these types1" (list op type-tags ))
                     (let ((t1->t2 (get-coercion type1 type2 ))
                           (t2->t1 (get-coercion type2 type1 )))
                       (cond (t1->t2
                               (apply-generic op (t1->t2 a1) a2))
                             (t2->t1
                               (apply-generic op a1 (t2->t1 a2)))
-                            (else (error "No method for these types"
+                            (else (error "No method for these types2"
                                          (list op type-tags )))))))
-              (error "No method for these types"
+              (error "No method for these types3"
                      (list op type-tags )))))))
 
 (define (install-=zero?)
