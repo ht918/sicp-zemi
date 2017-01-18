@@ -46,9 +46,9 @@
 (define (get op type)
   (let ((query
           (if (> (length type) 1)
-              (list op (car type))
-              (list op type))))
-    ((op-type-table 'lookup) query)))
+              (list op  type)
+              (list op (car type)))))
+      ((op-type-table 'lookup) query)))
 
 (define (put-coercion type1 type2 method)
   ((coercion-table 'insert!) (list type1 type2) method))
@@ -94,7 +94,7 @@
                     (type2 (cadr type-tags ))
                     (a1 (car args ))
                     (a2 (cadr args )))
-                (if (= type1 type2)
+                (if (eq? type1 type2)
                     (error "No method for these types1" (list op type-tags ))
                     (let ((t1->t2 (get-coercion type1 type2 ))
                           (t2->t1 (get-coercion type2 type1 )))
