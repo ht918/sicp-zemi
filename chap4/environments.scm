@@ -54,7 +54,7 @@
 (define nil '())
 
 (define (make-frame variables values)
-  (if (= (length variables values))
+  (if (= (length variables) (length values))
       (if (null? variables)
           nil
          (cons (cons (car variables) (car values))) (make-frame (cdr variables) (cdr values)))
