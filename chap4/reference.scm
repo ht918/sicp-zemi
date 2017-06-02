@@ -138,9 +138,7 @@
         (if (and (or (list? params) (pair? params)) (not (null? params)))
             (let ((env (define-var envtemp (car params) (car values))))
               (params-read env (cdr params) (cdr values)))
-            envtemp
-        )
-  )
+            envtemp))
 (define (base-apply fun args env)
   (cond ((data-closure? fun)
          (if (= (length (closure-params fun)) (length args))
