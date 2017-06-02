@@ -91,7 +91,16 @@
                 (frame-values frame)))))
   (env-loop env))
 
+(define (true? x) (not (eq? x false )))
+(define (false? x) (eq? x false ))
 
+(define (make-procedure parameters body env)
+  (list 'procedure parameters body env))
+(define (compound-procedure? p)
+  (tagged-list? p 'procedure ))
+(define (procedure-parameters p) (cadr p))
+(define (procedure-body p) (caddr p))
+(define (procedure-environment p) (cadddr p))
 
 ;chap4.1.4
 (define (primitive-procedure? proc)
@@ -117,6 +126,9 @@
   (map (lambda (proc) (list 'primitive (cadr proc )))
        primitive-procedures ))
 
+(define true #t)
+(define false #f)
+
 (define (setup-environment)
   (let (( initial-env
          (extend-environment (primitive-procedure-names)
@@ -133,13 +145,7 @@
     (primitive-implementation proc) args))
 (define input-prompt ";;; M-Eval input:")
 (define output-prompt ";;; M-Eval value:")
-(define (driver-loop)
-  (prompt-for-input input-prompt)
-  (let (( input (read )))
-    (let (( output (eval input the-global-environment )))
-      (announce-output output-prompt)
-      (user-print output )))
-  (driver-loop ))
+
 (define (prompt-for-input string)
   (newline) (newline) (display string) (newline ))
 (define (announce-output string)
@@ -152,4 +158,13 @@
                      '<procedure-env> ))
       (display object )))
 
+(define (driver-loop)
+  (prompt-for-input input-prompt)
+  (let (( input (read )))
+    (let (( output (eval input the-global-environment )))
+      (announce-output output-prompt)
+      (user-print output )))
+  (driver-loop ))
+
+(define the-global-environment (setup-environment ))
 
