@@ -57,10 +57,10 @@
   (if (= (length variables) (length values))
       (if (null? variables)
           nil
-         (cons (cons (car variables) (car values))) (make-frame (cdr variables) (cdr values)))
+         ((cons (cons (car variables) (car values))) (make-frame (cdr variables) (cdr values))))
       (if (< (length variables) (length values))
           (error "Too many arguments supplied" variables values)
-          (error "Too few arguments supplied" variables values ))))
+          (error "Too few arguments supplied" variables values )))))
 
 (define (frame-variables frame)
   (if (null? frame)
